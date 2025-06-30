@@ -1,27 +1,32 @@
 import sqlite3
 from datetime import date
+import os
 
 class SchedulerDB:
-    def __init__(self, db_path="resources/database.db", development=False):
-        self.db_path = db_path
+    def __init__(self,  development=False):
+        self.data_dir = os.path.join(os.path.dirname(__file__), "data")
+        self.db_path  = os.path.join(self.data_dir, "database.db")
         self._init_database(development)
 
     def _init_database(self, development):
-        """Initialize database with schema and sample data"""
+        # Get paths to SQL files using data directory
+        init_path = os.path.join(self.data_dir, "init.sql")
+        data_path = os.path.join(self.data_dir, "sample_data.sql")
+
         conn = sqlite3.connect(self.db_path)
         
-        # Execute init.sql
-        with open('resources/init.sql', 'r') as f:
+        # create tables
+        with open(init_path, 'r') as f:
             conn.executescript(f.read())
 
-        # Execute sample_data.sql if in development mode
+        # add sample data if in development mode
         if development:
-            with open('resources/sample_data.sql', 'r') as f:
+            with open(data_path, 'r') as f:
                 conn.executescript(f.read())
 
         conn.close()
     
-    
+
     def get_daily_schedule(self, date_str):
         """Get schedule for a specific date"""
         conn = sqlite3.connect(self.db_path)
@@ -48,6 +53,18 @@ class SchedulerDB:
             SELECT * FROM detailed_view 
             WHERE invoice_number = ?
         """, (invoice_number,))
+
+        result = cursor.fetchone()
+        conn.close()
+        return dict(result) if result else None
+
+    def get_stats(self):
+        """Get summary statistics of appointments"""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+
+        cursor = conn.cursor()
+        cursor.execute("""SELECT * FROM service_stats""")
 
         result = cursor.fetchone()
         conn.close()

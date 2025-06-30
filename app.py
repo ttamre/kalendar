@@ -1,9 +1,11 @@
 # app.py
 from flask import Flask, render_template
 from backend import SchedulerDB
+import os
 
 app = Flask(__name__)
 db = SchedulerDB(development=True)
+
 
 @app.route('/')
 def dashboard():
