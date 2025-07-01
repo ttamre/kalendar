@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS customers (
     phone VARCHAR(10) PRIMARY KEY CHECK(LENGTH(phone) = 10),
 
     name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL CHECK(email LIKE '%@%.%'),
+    email TEXT UNIQUE CHECK(email LIKE '%@%.%'),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -63,13 +63,13 @@ CREATE TABLE IF NOT EXISTS bookings (
 -- contains list of services offered
 -- has it's own table to allow for multiple services per booking
 CREATE TABLE IF NOT EXISTS services (
-    name TEXT PRIMARY KEY CHECK(name IN (
+    service_name TEXT PRIMARY KEY CHECK(service_name IN (
         'changeover', 'balance', 'repair', 'rotate', 'swap',
         'alignment', 'oil change', 'brakes', 'front end'
     ))
 );
 
-INSERT OR IGNORE INTO services (name) VALUES
+INSERT OR IGNORE INTO services (service_name) VALUES
 ('changeover'), ('balance'), ('repair'), ('rotate'), ('swap'),
 ('alignment'), ('oil change'), ('brakes'), ('front end');
 
@@ -78,11 +78,11 @@ INSERT OR IGNORE INTO services (name) VALUES
 -- since services are being used as a "label" and not a unique item, 1 service can apply to multiple bookings
 CREATE TABLE IF NOT EXISTS booking_services (
     invoice_number VARCHAR(8),
-    service TEXT,
+    service_name TEXT,
 
-    PRIMARY KEY (invoice_number, service),
+    PRIMARY KEY (invoice_number, service_name),
     FOREIGN KEY (invoice_number) REFERENCES bookings(invoice_number) ON DELETE CASCADE,
-    FOREIGN KEY (service) REFERENCES services(name) ON DELETE CASCADE
+    FOREIGN KEY (service_name) REFERENCES services(service_name) ON DELETE CASCADE
 );
 
 
@@ -143,7 +143,7 @@ SELECT
 
     -- displayed info
     c.name,
-    GROUP_CONCAT(bs.service, ', ') AS services
+    GROUP_CONCAT(bs.service_name, ', ') AS services
 
 FROM bookings b
 JOIN vehicles v ON b.vin = v.vin
@@ -178,7 +178,7 @@ SELECT
 
     -- service info
     -- GROUP_CONCAT() and GROUP_BY() allow for multiple services per booking
-    GROUP_CONCAT(bs.service, ', ') AS services
+    GROUP_CONCAT(bs.service_name, ', ') AS services
 
 FROM bookings b
 JOIN vehicles v ON b.vin = v.vin
@@ -187,13 +187,25 @@ LEFT JOIN booking_services bs ON b.invoice_number = bs.invoice_number
 GROUP BY b.invoice_number;
 
 -- service statistics view
-CREATE VIEW IF NOT EXISTS service_stats AS
-SELECT 
-    bs.service,
-    COUNT(*) as total_bookings,
-    COUNT(CASE WHEN b.status = 'completed' THEN 1 END) as completed,
-    COUNT(CASE WHEN b.status = 'cancelled' THEN 1 END) as cancelled,
-    ROUND((completed_count / cancelled_count) * 100, 0) as cancellation_rate
-FROM booking_services bs
-JOIN bookings b ON bs.invoice_number = b.invoice_number
-GROUP BY bs.service;
+CREATE VIEW IF NOT EXISTS stats AS
+WITH service_counts AS (  -- define a CTE (basically a "table of variables")
+    SELECT 
+        bs.service_name,
+        COUNT(*) as total_bookings,
+        COUNT(CASE WHEN b.status = 'booked' THEN 1 END) as booked,
+        COUNT(CASE WHEN b.status IN ('on_site', 'in_progress') THEN 1 END) as at_shop,
+        COUNT(CASE WHEN b.status = 'completed' THEN 1 END) as completed,
+        COUNT(CASE WHEN b.status = 'cancelled' THEN 1 END) as cancelled
+    FROM booking_services bs
+    JOIN bookings b ON bs.invoice_number = b.invoice_number
+    GROUP BY bs.service_name
+)
+SELECT  -- then, we can select from those variables
+    service_name as service,
+    booked,
+    at_shop,
+    completed,
+    cancelled,
+    total_bookings,
+    ROUND((cancelled * 100.0) / total_bookings, 0) as cancellation_rate
+FROM service_counts;

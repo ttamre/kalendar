@@ -42,21 +42,21 @@
 INSERT OR IGNORE INTO customers (phone, name, email) VALUES
 ('5551234567', 'John Mitchell', 'john.mitchell@email.com'),
 ('5552345678', 'Sarah Johnson', 'sarah.johnson@gmail.com'),
-('5553456789', 'Mike Rodriguez', 'mike.rodriguez@yahoo.com'),
+('5553456789', 'Mike Rodriguez', ''),
 ('5554567890', 'Emily Chen', 'emily.chen@outlook.com'),
 ('5555678901', 'David Thompson', 'david.thompson@email.com'),
 ('5556789012', 'Lisa Wilson', 'lisa.wilson@gmail.com'),
 ('5557890123', 'Robert Brown', 'robert.brown@yahoo.com'),
 ('5558901234', 'Jennifer Davis', 'jennifer.davis@outlook.com'),
 ('5559012345', 'Michael Garcia', 'michael.garcia@email.com'),
-('5550123456', 'Amanda Martinez', 'amanda.martinez@gmail.com'),
+('5550123456', 'Amanda Martinez', ''),
 ('5551357908', 'Chris Anderson', 'chris.anderson@yahoo.com'),
 ('5552468097', 'Nicole Taylor', 'nicole.taylor@outlook.com'),
-('5553691470', 'Kevin White', 'kevin.white@email.com'),
+('5553691470', 'Kevin White', ''),
 ('5554702581', 'Rachel Green', 'rachel.green@gmail.com'),
 ('5555813692', 'Daniel Lee', 'daniel.lee@yahoo.com'),
 ('5556924703', 'Ashley Clark', 'ashley.clark@outlook.com'),
-('5557035814', 'Jason Hall', 'jason.hall@email.com'),
+('5557035814', 'Jason Hall', ''),
 ('5558146925', 'Melissa Young', 'melissa.young@gmail.com'),
 ('5559258036', 'Brandon King', 'brandon.king@yahoo.com'),
 ('5550369147', 'Stephanie Wright', 'stephanie.wright@outlook.com');
@@ -160,7 +160,7 @@ INSERT OR IGNORE INTO bookings (invoice_number, vin, booking_date, booking_time,
 -- Front end + alignment always
 -- Total appointments: 53 (excluding cancelled)
 
-INSERT OR IGNORE INTO booking_services (invoice_number, service) VALUES
+INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- June 30 services (16 appointments, 2 cancelled)
 -- 20% changeover = 3 appointments
 ('INV00001', 'changeover'), ('INV00001', 'balance'),
@@ -189,7 +189,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service) VALUES
 
 -- 15% brakes = 2 appointments
 ('INV00011', 'brakes'),
--- INV00015 is cancelled, no services
+('INV00015', 'rotate'),
 
 -- July 2 services (16 appointments, 1 cancelled)
 -- 20% changeover = 3 appointments
@@ -220,7 +220,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service) VALUES
 -- 15% brakes = 2 appointments
 ('INV00026', 'brakes'),
 ('INV00030', 'brakes'),
--- INV00024 is cancelled, no services
+('INV00024', 'brakes'),
 
 -- July 3 services (13 appointments, 1 cancelled)
 -- 20% changeover = 3 appointments
@@ -248,7 +248,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service) VALUES
 ('INV00038', 'front end'), ('INV00038', 'alignment'),
 
 -- 15% brakes = 1 appointment
--- INV00039 is cancelled, no services
+('INV00039', 'oil change'),
 
 -- July 4 services (8 appointments, 1 cancelled)
 -- 20% changeover = 2 appointments
@@ -271,8 +271,8 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service) VALUES
 ('INV00047', 'front end'), ('INV00047', 'alignment'),
 
 -- 15% brakes = 1 appointment
-('INV00048', 'brakes');
--- INV00049 is cancelled, no services
+('INV00048', 'brakes'),
+('INV00049', 'front end'), ('INV00049', 'alignment')
 
 -- ==================
 -- VERIFICATION QUERIES
