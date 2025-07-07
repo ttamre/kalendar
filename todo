@@ -1,0 +1,13 @@
+!!!!!RESUME!!!!!
+
+calendar table
+
+gets, update, delete (db/routes/docs)
+
+testing (postman)
+
+rest of frontend
+
+testing (pytest + jest)
+
+deploy (upload image to artifactregistry, build with cloudbuild, deploy with appengine)

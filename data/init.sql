@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 -- SERVICES TABLE
 -- contains list of services offered
--- has it's own table to allow for multiple services per booking
+-- has it's own table for better data integrity and normalization
 CREATE TABLE IF NOT EXISTS services (
     service_name TEXT PRIMARY KEY CHECK(service_name IN (
         'changeover', 'balance', 'repair', 'rotate', 'swap',
@@ -82,6 +82,9 @@ CREATE TABLE IF NOT EXISTS booking_services (
 
     PRIMARY KEY (invoice_number, service_name),
     FOREIGN KEY (invoice_number) REFERENCES bookings(invoice_number) ON DELETE CASCADE,
+    
+    -- if a service is added that isn't in services.service_name, FKC error is thrown
+    -- if a service is removed from the table, so will related booked services
     FOREIGN KEY (service_name) REFERENCES services(service_name) ON DELETE CASCADE
 );
 
