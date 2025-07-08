@@ -15,9 +15,7 @@ api = FastAPI(
         "name": "Tem Tamre",
         "url": "https://ttamre.github.io/",
         "email": "temtamre@gmail.com"
-    },
-
-    root_path="/api"
+    }
 )
 
 # Set permissions
