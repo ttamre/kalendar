@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/OpenAPI-3.1.0-purple" />
 </div>
 
-<p style="font-family:monospace">Auto shop appointment scheduler (in progress)</p>
+<p style="font-family:monospace">Auto shop appointment scheduler (in progress; personal project not affiliated with any other businesses)</p>
 
 ![Kalendar](example.png)
 
