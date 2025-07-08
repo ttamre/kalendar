@@ -59,7 +59,7 @@
 
   .column,
   .columns {
-    margin-left: 4%;
+    margin-left: 3%;
   }
 
   .column:first-child,
@@ -217,7 +217,7 @@ body {
   /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
-  font-family: "Consolas", "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #222;
 }
 
@@ -335,7 +335,7 @@ input[type="button"] {
   white-space: nowrap;
   background-color: transparent;
   border-radius: 4px;
-  /* border: 1px solid #EE5519; */
+  border: none;
   cursor: pointer;
   box-sizing: border-box;
 }

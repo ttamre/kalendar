@@ -10,7 +10,7 @@ function generateTimeSlots() {
 
     while (startTime <= endTime) {
         const slot = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        timeSlots.push(slot);
+        timeSlots.push(slot.replaceAll('.', ''));
         startTime.setMinutes(startTime.getMinutes() + 30);
     }
 
@@ -19,28 +19,26 @@ function generateTimeSlots() {
 
 function Calendar() {
     return (
-        <div className="container">
-            <div className="container bordered">
-                <div className="row calendarHeader">
-                    <div className="two columns">......</div>
-                    <h6 className="two columns">TIRES 1</h6>
-                    <h6 className="two columns">TIRES 2</h6>
-                    <h6 className="two columns">MECH 1</h6>
-                    <h6 className="two columns">MECH 2</h6>
-                    <h6 className="two columns">ALIGNMENT</h6>
-                </div>
-                {generateTimeSlots().map((time, index) => (
-                    <div key={index} className="row">
-                        <div className="two columns">{time}</div>
-                        {/* appointments go here */}
-                        <div className="appointment two columns">swap</div>
-                        <div className="appointment two columns">repair</div>
-                        <div className="appointment two columns">brakes</div>
-                        <div className="appointment two columns">front end</div>
-                        <div className="appointment two columns">alignment</div>
-                    </div>
-                ))}
+        <div className="container bordered calendarContainer">
+            <div className="row calendarHeader">
+                <h5 className="two columns" />
+                <h5 className="two columns">TIRES 1</h5>
+                <h5 className="two columns">TIRES 2</h5>
+                <h5 className="two columns">MECH 1</h5>
+                <h5 className="two columns">MECH 2</h5>
+                <h5 className="two columns">ALIGNMENT</h5>
             </div>
+            {generateTimeSlots().map((time, index) => (
+                <div key={index} className="row">
+                    <div className="two columns">{time}</div>
+
+                    <div className="appointment two columns">SWAP</div>
+                    <div className="appointment two columns">REPAIR</div>
+                    <div className="appointment two columns">BRAKES</div>
+                    <div className="appointment two columns">FRONT END</div>
+                    <div className="appointment two columns">ALIGNMENT</div>
+                </div>
+            ))}
         </div>
     );
 }

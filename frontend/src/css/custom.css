@@ -1,11 +1,10 @@
-.container {
-    padding: 20px;
+body {
+    font-family: "Victor Mono", "Courier New", "Consolas";
 }
 
-.bordered {
-    border: 1px solid #fafafa;
-    border-radius: 5px;
-
+h6 {
+    font-weight: 700;
+    font-display: auto;
 }
 
 .header {
@@ -14,30 +13,30 @@
     justify-content: space-between;
     padding: 10px 20px;
     background-color: #fafafa;
-    /* Light background for header */
 }
 
 .logo {
     height: 75px;
 }
 
-.headerButton {
-    width: 100px;
-    height: 50px;
-    font-size: 12px;
-}
-
-input+button {
-    margin-left: 1%;
+.container {
+    margin: 20px auto;
+    padding: 20px;
+    width: auto;
+    border: 1px solid #fafafa;
+    border-radius: 5px;
 }
 
 
 .calendarHeader {
     border-bottom: 1px solid #fafafa;
-    ;
+    justify-content: space-between;
+    width: auto;
 }
 
-
+.appointment {
+    font-weight: 200;
+}
 
 .appointment:hover {
     background-color: #ffd4c5;
