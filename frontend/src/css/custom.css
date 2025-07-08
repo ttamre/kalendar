@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fafafa;
+    /* Light background for header */
+}
+
+.logo {
+    height: 75px;
+}
+
+input+button {
+    margin-left: 1%;
+}
