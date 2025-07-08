@@ -1,0 +1,39 @@
+steps:
+
+# Build frontend
+- name: 'node:16'
+  id: 'Build frontend'
+  dir: 'frontend'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      npm install
+      npm run build
+
+# Deploy frontend service
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'Deploy frontend'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud app deploy frontend/app.yaml --quiet
+
+# Deploy backend service
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'Deploy backend'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud app deploy backend/app.yaml --quiet
+
+# Deploy dispatch.yaml to route requests to appropriate services
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'Deploy dispatch'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud app deploy dispatch.yaml --quiet
