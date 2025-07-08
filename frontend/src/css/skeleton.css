@@ -351,8 +351,8 @@ input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
   /* color: #fff; */
-  border: 1px solid #EE5519;
-  /* background-color: #EE5519; */
+  color: #fff;
+  background-color: #EE5519;
   outline: 0;
 }
 

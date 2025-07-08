@@ -1,5 +1,4 @@
 import './css/normalize.css';
-import './css/output.css';
 import './css/skeleton.css';
 import './css/custom.css';
 

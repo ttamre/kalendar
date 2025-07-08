@@ -1,3 +1,13 @@
+.container {
+    padding: 20px;
+}
+
+.bordered {
+    border: 1px solid #fafafa;
+    border-radius: 5px;
+
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -11,6 +21,25 @@
     height: 75px;
 }
 
+.headerButton {
+    width: 100px;
+    height: 50px;
+    font-size: 12px;
+}
+
 input+button {
     margin-left: 1%;
+}
+
+
+.calendarHeader {
+    border-bottom: 1px solid #fafafa;
+    ;
+}
+
+
+
+.appointment:hover {
+    background-color: #ffd4c5;
+    cursor: pointer;
 }
