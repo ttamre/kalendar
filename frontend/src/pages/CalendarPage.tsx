@@ -4,7 +4,7 @@ import Calendar from '../components/Calendar';
 function CalendarPage() {
 	return (
 		<>
-			<Header logoImg="images/kalendar-transparent.png" />
+			<Header />
 			<Calendar />
 		</>
 	);

@@ -7,31 +7,52 @@ h6 {
     font-display: auto;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background-color: #fafafa;
-}
-
-.logo {
-    height: 75px;
+.loading {
+    margin: 10px;
 }
 
 .container {
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 20px;
     width: auto;
     border: 1px solid #fafafa;
     border-radius: 5px;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fcfcfc;
+}
+
+.headerIcons {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 75px;
+}
+
+.github {
+    height: 40px;
+}
 
 .calendarHeader {
     border-bottom: 1px solid #fafafa;
     justify-content: space-between;
     width: auto;
+}
+
+.calendarBody {
+    margin: 10px 0;
+}
+
+.time {
+    font-weight: 700;
+    color: #333;
 }
 
 .appointment {

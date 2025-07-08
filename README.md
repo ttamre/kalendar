@@ -19,6 +19,7 @@ git clone https://www.github.com/ttamre/kalendar.git
 cd kalendar
 
 # install python dependencies
+cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -33,26 +34,27 @@ npm install
 <h3 style="font-family:monospace">development</h3>
 
 ```bash
-# use 2 terminal windows so you can see all logs and linting errors
-
-# backend (terminal 1, with venv active)
-cd backend
-uvicorn api:api --reload --port 5000
-
-# frontend (terminal 2)
+# frontend
 cd frontend
 npm start
+
+# backend
+cd backend
+source venv/bin/activate
+uvicorn api:api --reload --port 5000
 ```
 
 <h3 style="font-family:monospace">production</h3>
 
 ```bash
-# run node in background
+# NOTE: Set proxy service for api/client communication
+
+# frontend
 cd frontend
 npm run build
 serve -s build &
 
-# run api in foreground
+# backend
 cd ../backend
 source ../venv/bin/activate
 uvicorn api:api --port 5000
