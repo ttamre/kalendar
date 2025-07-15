@@ -194,21 +194,18 @@ CREATE VIEW IF NOT EXISTS stats AS
 WITH service_counts AS (  -- define a CTE (basically a "table of variables")
     SELECT 
         bs.service_name,
-        COUNT(*) as total_bookings,
-        COUNT(CASE WHEN b.status = 'booked' THEN 1 END) as booked,
-        COUNT(CASE WHEN b.status IN ('on_site', 'in_progress') THEN 1 END) as at_shop,
+        COUNT(CASE WHEN b.status IN ('booked', 'on_site', 'in_progress') THEN 1 END) as in_progress,
         COUNT(CASE WHEN b.status = 'completed' THEN 1 END) as completed,
-        COUNT(CASE WHEN b.status = 'cancelled' THEN 1 END) as cancelled
+        COUNT(CASE WHEN b.status = 'cancelled' THEN 1 END) as cancelled,
+        COUNT(*) as total_bookings
     FROM booking_services bs
     JOIN bookings b ON bs.invoice_number = b.invoice_number
     GROUP BY bs.service_name
 )
 SELECT  -- then, we can select from those variables
     service_name as service,
-    booked,
-    at_shop,
+    in_progress,
     completed,
     cancelled,
-    total_bookings,
-    ROUND((cancelled * 100.0) / total_bookings, 0) as cancellation_rate
+    total_bookings
 FROM service_counts;

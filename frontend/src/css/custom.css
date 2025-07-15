@@ -7,6 +7,20 @@ h6 {
     font-display: auto;
 }
 
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    /* margin: 10px auto; */
+}
+
+thead {
+    font-size: 110%;
+    /* background-color: #fdfdfd; */
+    margin: 10px 10px;
+    padding: 10px 10px;
+}
+
 .loading {
     margin: 10px;
 }
@@ -38,13 +52,14 @@ h6 {
 
 .logo {
     height: 75px;
+    cursor: pointer;
 }
 
 .github {
     height: 40px;
 }
 
-.calendarHeader {
+.calendarHead {
     border-bottom: 1px solid #fafafa;
     justify-content: space-between;
     width: auto;
@@ -109,5 +124,21 @@ h6 {
 }
 
 .appointment.cancelled {
+    color: red;
+}
+
+.stats {
+    text-align: right;
+}
+
+.stats.grey {
+    color: grey;
+}
+
+.stats.green {
+    color: green;
+}
+
+.stats.red {
     color: red;
 }

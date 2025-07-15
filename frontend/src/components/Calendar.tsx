@@ -17,12 +17,10 @@ export default function Calendar() {
         return <div className="error container">Error: {error}</div>;
     }
 
-    console.log(appointments)
-
     return (
-        <div className="container calendarContainer">
+        <div className="container">
 
-            <div className="calendarHeader">
+            <div className="calendarHead">
 
                 <div className="row">
                     <div className="two columns">&nbsp;</div>
@@ -74,7 +72,7 @@ export default function Calendar() {
 async function fetchAppointments() {
     const response = await fetch("/api/schedule");
     if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(`Failed to fetch schedule (${response.status} ${response.statusText})`);
     }
     return response.json();
 }
