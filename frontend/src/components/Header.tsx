@@ -15,8 +15,8 @@ function Header() {
             </div>
 
             <div className="headerButtons">
-                <button className="button" >Parts</button>
-                <button className="button headerButton" >Orders </button>
+                <button className="button" >Stats</button>
+                <button className="button" >Orders </button>
             </div>
 
         </div>

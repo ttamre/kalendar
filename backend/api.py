@@ -1,9 +1,8 @@
 # app.py
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-import logging
 
-from routers import customers, vehicles, bookings
+from routers import customers, vehicles, bookings, schedule, stats
 
 
 # Create API instance
@@ -32,6 +31,8 @@ api_router = APIRouter(prefix="/api")
 api_router.include_router(customers.router)
 api_router.include_router(vehicles.router)
 api_router.include_router(bookings.router)
+api_router.include_router(schedule.router)
+api_router.include_router(stats.router)
 api.include_router(api_router)
 
 

@@ -11,6 +11,10 @@ h6 {
     margin: 10px;
 }
 
+.error {
+    margin: 10px;
+}
+
 .container {
     margin: 10px auto;
     padding: 20px;
@@ -53,13 +57,57 @@ h6 {
 .time {
     font-weight: 700;
     color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
 }
 
 .appointment {
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    white-space: pre-wrap;
+    word-break: break-all;
+
+    font-size: 1.1rem;
     font-weight: 200;
+    padding: 5px;
+    border: 0.1rem solid #fafafa;
+    /* background-color: #fffdf6; */
+}
+
+.appointment .name {
+    font-weight: 600;
+}
+
+.appointment .services {
+    font-weight: 400;
+    text-align: right;
 }
 
 .appointment:hover {
     background-color: #ffd4c5;
     cursor: pointer;
+}
+
+.appointment.booked {
+    color: darkgoldenrod;
+}
+
+.appointment.on_site {
+    color: green;
+}
+
+.appointment.in_progress {
+    color: #1681c9;
+}
+
+.appointment.complete {
+    color: hsl(0, 0%, 67%);
+    text-decoration: line-through;
+}
+
+.appointment.cancelled {
+    color: red;
 }

@@ -23,11 +23,12 @@
  * - services: predefined list from init.sql
  * 
  * Business Constraints:
- * - Appointments: June 30 - July 4 (except July 1), 7:30am-5:30pm
+ * - Appointments: June 30 - July 4 (except July 1), 8:00am-5:30pm
  * - No appointments 12pm-1pm (lunch break)
  * - Appointments end by 6pm
  * - Default 30min duration, except: brakes/front end (60-120min), alignment (60min)
  * - 25-100% booked per day
+ * - NEW: all appointments must have an attached booking_service (including cancelled appointments)
  * - Service distribution: 20% changeover, 20% swap, 5% balance, 15% rotate, 10% oil change, 15% front end, 15% brakes
  * - Changeover + balance always, 50% + alignment, 25% + oil change
  * - Front end + alignment always
@@ -88,13 +89,13 @@ INSERT OR IGNORE INTO vehicles (vin, phone, year, make, model, plate, mileage) V
 
 -- BOOKINGS
 -- invoice_number must be exactly 8 chars, vin must reference existing vehicle
--- booking_date: June 30 - July 4 (except July 1), 7:30am-5:30pm, no 12pm-1pm
+-- booking_date: June 30 - July 4 (except July 1), 8:00am-5:30pm, no 12pm-1pm
 -- Default 30min duration, except: brakes/front end (60-120min), alignment (60min)
 -- 25-100% booked per day
 
 -- June 30, 2025 (Monday) - 85% booked
 INSERT OR IGNORE INTO bookings (invoice_number, vin, booking_date, booking_time, booking_duration, status) VALUES
-('INV00001', '1HGBH41JXMN109186', '2025-06-30', '07:30', 30, 'completed'),
+('INV00001', '1HGBH41JXMN109186', '2025-06-30', '08:00', 30, 'completed'),
 ('INV00002', '1FTFW1ET5DFC10312', '2025-06-30', '08:00', 30, 'completed'),
 ('INV00003', '1G1BE5SM7H7123456', '2025-06-30', '08:30', 90, 'completed'),
 ('INV00004', '3VW467AT8HM123789', '2025-06-30', '09:00', 60, 'completed'),
@@ -112,7 +113,7 @@ INSERT OR IGNORE INTO bookings (invoice_number, vin, booking_date, booking_time,
 ('INV00016', 'KNDJP3A57H7123456', '2025-06-30', '17:00', 30, 'completed'),
 
 -- July 2, 2025 (Wednesday) - 90% booked
-('INV00017', '1GCCS14E8H8123456', '2025-07-02', '07:30', 30, 'completed'),
+('INV00017', '1GCCS14E8H8123456', '2025-07-02', '08:00', 30, 'completed'),
 ('INV00018', '2C3CDZAG8HH123456', '2025-07-02', '08:00', 30, 'completed'),
 ('INV00019', '1FA6P8TH7H5123456', '2025-07-02', '08:30', 30, 'completed'),
 ('INV00020', '1C6SRFFT8HN123456', '2025-07-02', '09:00', 60, 'completed'),
@@ -130,7 +131,7 @@ INSERT OR IGNORE INTO bookings (invoice_number, vin, booking_date, booking_time,
 ('INV00032', '3CZRU5H38HM123456', '2025-07-02', '17:00', 30, 'booked'),
 
 -- July 3, 2025 (Thursday) - 75% booked
-('INV00033', 'WBAJA7C58HWF12345', '2025-07-03', '07:30', 30, 'completed'),
+('INV00033', 'WBAJA7C58HWF12345', '2025-07-03', '08:00', 30, 'completed'),
 ('INV00034', '1GKKNPLS8HZ123456', '2025-07-03', '08:00', 30, 'completed'),
 ('INV00035', '1FMHK8F84HGA12345', '2025-07-03', '08:30', 90, 'completed'),
 ('INV00036', 'KNDJP3A57H7123456', '2025-07-03', '09:30', 30, 'completed'),
@@ -172,7 +173,8 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 ('INV00010', 'swap'), 
 ('INV00016', 'swap'),
 
--- 5% balance = 1 standalone
+-- 10% balance = 1 standalone
+('INV00006', 'balance'),
 ('INV00008', 'balance'),
 
 -- 15% rotate = 2 appointments
