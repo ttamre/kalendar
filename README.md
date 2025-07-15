@@ -8,7 +8,8 @@
 
 <p style="font-family:monospace">Auto shop appointment scheduler (in progress; personal project not affiliated with any businesses)</p>
 
-![Kalendar](example.jpeg)
+![Schedule](examples/example_schedule.jpeg)
+![Stats](examples/example_stats.jpeg)
 
 
 <h2 style="font-family:monospace">Installation</h2>
