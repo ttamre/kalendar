@@ -1,8 +1,13 @@
 # app.py
+import sys
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import customers, vehicles, bookings, schedule, stats
+
+
+# Google Cloud Build will save dependencies in here
+sys.path.insert(0, "lib")
 
 
 # Create API instance

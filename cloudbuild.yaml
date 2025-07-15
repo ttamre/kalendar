@@ -20,6 +20,16 @@ steps:
     - |
       gcloud app deploy frontend/app.yaml --quiet
 
+# Install backend requirements
+- name: 'python:3.11'
+  id: 'Install backend requirements'
+  dir: 'backend'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      pip install -r requirements.txt -t lib
+      
 # Deploy backend service
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   id: 'Deploy backend'
