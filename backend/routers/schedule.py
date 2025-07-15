@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import logging
 
 from database import db
@@ -35,10 +35,10 @@ def generate_time_slots():
     return time_slots
 
 
-@router.get('/schedule', responses={200: get_error_response(200, example_schedule)})
-def get_schedule():
-    today = "2025-06-30"  # or date.today().strftime('%Y-%m-%d')
-    schedule = db.select_schedule(today)
+@router.get('/schedule/{booking_date}', responses={200: get_error_response(200, example_schedule)})
+def get_schedule(booking_date: str = date.today().strftime("%Y-%m-%d")):
+
+    schedule = db.select_schedule(booking_date)
     formatted_schedule = generate_time_slots()
     
     for appointment in schedule:
@@ -51,7 +51,7 @@ def get_schedule():
 
         tire_services = ["changeover", "balance", "repair", "swap", "rotate"]
         mech_services = ["brakes", "front end", "oil change"]
-        alignment_services = ["alignment"]
+        alignment_services = ["al4"]
 
         # TODO handle multiple services in a single appointment
         # For now, just assign the first service to a bay
@@ -60,12 +60,12 @@ def get_schedule():
         
         if any(service in tire_services for service in services):
             bay = "TIRES 1" if "TIRES 1" not in formatted_schedule[booking_time] else "TIRES 2"
-        elif any(service in mech_services for service in services):
+        if any(service in mech_services for service in services):
             bay = "MECH 1" if "MECH 1" not in formatted_schedule[booking_time] else "MECH 2"
-        elif any(service in alignment_services for service in services):
+        if any(service in alignment_services for service in services):
             bay = "ALIGNMENT"
 
         formatted_schedule[booking_time][bay] = appointment
 
-    logger.info(f"{'-' * 10}\n{today}:\n{'-' * 10}\n{formatted_schedule}")
+    logger.info(f"{'-' * 10}\n{booking_date}:\n{'-' * 10}\n{formatted_schedule}")
     return JSONResponse(content=formatted_schedule)

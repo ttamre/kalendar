@@ -26,12 +26,12 @@
  * - Appointments: June 30 - July 4 (except July 1), 8:00am-5:30pm
  * - No appointments 12pm-1pm (lunch break)
  * - Appointments end by 6pm
- * - Default 30min duration, except: brakes/front end (60-120min), alignment (60min)
+ * - Default 30min duration, except: brakes/front end (60-120min), al4 (60min)
  * - 25-100% booked per day
  * - NEW: all appointments must have an attached booking_service (including cancelled appointments)
  * - Service distribution: 20% changeover, 20% swap, 5% balance, 15% rotate, 10% oil change, 15% front end, 15% brakes
- * - Changeover + balance always, 50% + alignment, 25% + oil change
- * - Front end + alignment always
+ * - Changeover + balance always, 50% + al4, 25% + oil change
+ * - Front end + al4 always
  */
 
 -- ==================
@@ -90,7 +90,7 @@ INSERT OR IGNORE INTO vehicles (vin, phone, year, make, model, plate, mileage) V
 -- BOOKINGS
 -- invoice_number must be exactly 8 chars, vin must reference existing vehicle
 -- booking_date: June 30 - July 4 (except July 1), 8:00am-5:30pm, no 12pm-1pm
--- Default 30min duration, except: brakes/front end (60-120min), alignment (60min)
+-- Default 30min duration, except: brakes/front end (60-120min), al4 (60min)
 -- 25-100% booked per day
 
 -- June 30, 2025 (Monday) - 85% booked
@@ -157,15 +157,15 @@ INSERT OR IGNORE INTO bookings (invoice_number, vin, booking_date, booking_time,
 
 -- BOOKING SERVICES
 -- Service distribution: 20% changeover, 20% swap, 5% balance, 15% rotate, 10% oil change, 15% front end, 15% brakes
--- Changeover + balance always, 50% + alignment, 25% + oil change
--- Front end + alignment always
+-- Changeover + balance always, 50% + al4, 25% + oil change
+-- Front end + al4 always
 -- Total appointments: 53 (excluding cancelled)
 
 INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- June 30 services (16 appointments, 2 cancelled)
 -- 20% changeover = 3 appointments
 ('INV00001', 'changeover'), ('INV00001', 'balance'),
-('INV00007', 'changeover'), ('INV00007', 'balance'), ('INV00007', 'alignment'),
+('INV00007', 'changeover'), ('INV00007', 'balance'), ('INV00007', 'al4'),
 ('INV00014', 'changeover'), ('INV00014', 'balance'), ('INV00014', 'oil change'),
 
 -- 20% swap = 3 appointments  
@@ -185,9 +185,9 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 ('INV00004', 'oil change'),
 ('INV00013', 'oil change'),
 
--- 15% front end = 2 appointments (+ alignment always)
-('INV00003', 'front end'), ('INV00003', 'alignment'),
-('INV00009', 'front end'), ('INV00009', 'alignment'),
+-- 15% front end = 2 appointments (+ al4 always)
+('INV00003', 'front end'), ('INV00003', 'al4'),
+('INV00009', 'front end'), ('INV00009', 'al4'),
 
 -- 15% brakes = 2 appointments
 ('INV00011', 'brakes'),
@@ -196,7 +196,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- July 2 services (16 appointments, 1 cancelled)
 -- 20% changeover = 3 appointments
 ('INV00017', 'changeover'), ('INV00017', 'balance'),
-('INV00021', 'changeover'), ('INV00021', 'balance'), ('INV00021', 'alignment'),
+('INV00021', 'changeover'), ('INV00021', 'balance'), ('INV00021', 'al4'),
 ('INV00028', 'changeover'), ('INV00028', 'balance'), ('INV00028', 'oil change'),
 
 -- 20% swap = 3 appointments
@@ -215,9 +215,9 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 ('INV00019', 'oil change'),
 ('INV00032', 'oil change'),
 
--- 15% front end = 2 appointments (+ alignment always)
-('INV00020', 'front end'), ('INV00020', 'alignment'),
-('INV00023', 'front end'), ('INV00023', 'alignment'),
+-- 15% front end = 2 appointments (+ al4 always)
+('INV00020', 'front end'), ('INV00020', 'al4'),
+('INV00023', 'front end'), ('INV00023', 'al4'),
 
 -- 15% brakes = 2 appointments
 ('INV00026', 'brakes'),
@@ -227,7 +227,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- July 3 services (13 appointments, 1 cancelled)
 -- 20% changeover = 3 appointments
 ('INV00033', 'changeover'), ('INV00033', 'balance'),
-('INV00037', 'changeover'), ('INV00037', 'balance'), ('INV00037', 'alignment'),
+('INV00037', 'changeover'), ('INV00037', 'balance'), ('INV00037', 'al4'),
 ('INV00043', 'changeover'), ('INV00043', 'balance'), ('INV00043', 'oil change'),
 
 -- 20% swap = 3 appointments
@@ -245,9 +245,9 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- 10% oil change = 1 appointment
 ('INV00042', 'oil change'),
 
--- 15% front end = 2 appointments (+ alignment always)
-('INV00035', 'front end'), ('INV00035', 'alignment'),
-('INV00038', 'front end'), ('INV00038', 'alignment'),
+-- 15% front end = 2 appointments (+ al4 always)
+('INV00035', 'front end'), ('INV00035', 'al4'),
+('INV00038', 'front end'), ('INV00038', 'al4'),
 
 -- 15% brakes = 1 appointment
 ('INV00039', 'oil change'),
@@ -255,7 +255,7 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- July 4 services (8 appointments, 1 cancelled)
 -- 20% changeover = 2 appointments
 ('INV00046', 'changeover'), ('INV00046', 'balance'),
-('INV00051', 'changeover'), ('INV00051', 'balance'), ('INV00051', 'alignment'),
+('INV00051', 'changeover'), ('INV00051', 'balance'), ('INV00051', 'al4'),
 
 -- 20% swap = 1 appointment
 ('INV00050', 'swap'),
@@ -269,12 +269,12 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- 10% oil change = 1 appointment
 -- (included with changeover above)
 
--- 15% front end = 1 appointment (+ alignment always)
-('INV00047', 'front end'), ('INV00047', 'alignment'),
+-- 15% front end = 1 appointment (+ al4 always)
+('INV00047', 'front end'), ('INV00047', 'al4'),
 
 -- 15% brakes = 1 appointment
 ('INV00048', 'brakes'),
-('INV00049', 'front end'), ('INV00049', 'alignment')
+('INV00049', 'front end'), ('INV00049', 'al4')
 
 -- ==================
 -- VERIFICATION QUERIES
@@ -319,8 +319,8 @@ INSERT OR IGNORE INTO booking_services (invoice_number, service_name) VALUES
 -- JOIN booking_services bs2 ON bs1.invoice_number = bs2.invoice_number 
 -- WHERE bs1.service = 'changeover' AND bs2.service = 'balance';
 
--- SELECT 'Front end with alignment' as check_type,
---        COUNT(*) as front_end_with_alignment  
+-- SELECT 'Front end with al4' as check_type,
+--        COUNT(*) as front_end_with_al4  
 -- FROM booking_services bs1
 -- JOIN booking_services bs2 ON bs1.invoice_number = bs2.invoice_number
--- WHERE bs1.service = 'front end' AND bs2.service = 'alignment';
+-- WHERE bs1.service = 'front end' AND bs2.service = 'al4';

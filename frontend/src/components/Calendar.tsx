@@ -1,96 +1,91 @@
 /* Calendar Component */
 
 import { useState, useEffect } from "react";
+import { getPreviousWeekday, getNextWeekday, getNearestWeekday } from "../utils/dateUtils";
 
+const BAYS = ["TIRES 1", "TIRES 2", "MECH 1", "MECH 2", "ALIGNMENT"];
 
 export default function Calendar() {
-    const [appointments, setAppointments] = useState([]);
+    const [appointments, setAppointments] = useState<Record<string, Record<string, any>>>({});
+    const [selectedDate, setSelectedDate] = useState<Date>(getNearestWeekday(new Date("2025-06-31")));
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchAppointments()
+        fetchAppointments(selectedDate)
             .then(data => setAppointments(data))
             .catch(err => setError(err.message));
-    }, []);
+    }, [selectedDate]);
 
     if (error) {
         return <div className="error container">Error: {error}</div>;
     }
 
+    console.log(appointments);
+
+    const handlePreviousDay = () => setSelectedDate(getPreviousWeekday(selectedDate));
+    const handleNextDay = () => setSelectedDate(getNextWeekday(selectedDate));
+
     return (
         <div className="container">
+            <p className="calendarDate">{selectedDate.toDateString()}</p>
 
             <div className="calendarHead">
 
                 <div className="row">
-                    <div className="two columns">&nbsp;</div>
-                    <h5 className="two columns">TIRES 1</h5>
-                    <h5 className="two columns">TIRES 2</h5>
-                    <h5 className="two columns">MECH 1</h5>
-                    <h5 className="two columns">MECH 2</h5>
-                    <h5 className="two columns">ALIGNMENT</h5>
+                    <div className="two columns calendarButtons">
+                        <div onClick={handlePreviousDay} className="button">&lt;</div>
+                        <div onClick={handleNextDay} className="button">&gt;</div>
+                    </div>
+
+                    {BAYS.map((bay) => (
+                        <h5 key={bay} className="two columns">{bay}</h5>
+                    ))}
                 </div>
 
             </div>
 
             <div className="calendarBody">
 
-                {generateTimeSlots().map((time, index) => (
-                    <div key={index} className="row">
+                {Object.entries(appointments).map(([time, bays]) => (
+                    <div key={time} className="row calendarRow">
                         <div className="two columns time">{time}</div>
 
-                        <div className="two columns appointment booked">
-                            <div className="name">JOE<br />SMITH</div>
-                            <span className="services">CHANGEOVER</span>
-                        </div>
+                        {BAYS.map((bay) => {
+                            const appointment = bays[bay];
+                            if (!appointment) {
+                                return <div key={bay} className="two columns appointment">&nbsp;<br />&nbsp;</div>;
+                            }
 
-                        <div className="two columns appointment on_site">
-                            <div className="name">BOB<br />ROSS</div>
-                            <div className="services">REPAIR</div>
-                        </div>
-                        <div className="two columns appointment in_progress">
-                            <div className="name">DAVE<br />JONES</div>
-                            <div className="services">BRAKES</div>
-                        </div>
-                        <div className="two columns appointment complete">
-                            <div className="name">MATT<br />MOLE</div>
-                            <div className="services">FRONT<br />END</div>
-                        </div>
-                        <div className="two columns appointment cancelled">
-                            <div className="name">SHELLY<br />SUE</div>
-                            <div className="services">AL4</div>
-                        </div>
+                            const status = appointment.status || "booked";
+                            const name = appointment.name || "";
+                            const [first, last] = name.split(" ");
+                            const services = appointment.services.split(",").map((service: string) => service.trim());
+
+                            return (
+                                <div key={bay} onClick={() => handleAppointmentClick(appointment)} className={`two columns appointment ${status}`}>
+                                    <div className="name">
+                                        {first}<br />{last}
+                                    </div>
+                                    <div className="services">{services[0]}</div>
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
-
             </div>
-        </div >
+        </div>
     );
 }
 
-
-async function fetchAppointments() {
-    const response = await fetch("/api/schedule");
+async function fetchAppointments(bookingDate: Date = new Date()) {
+    const dateString = bookingDate.toLocaleDateString("en-CA");
+    const response = await fetch(`/api/schedule/${dateString}`);
     if (!response.ok) {
         throw new Error(`Failed to fetch schedule (${response.status} ${response.statusText})`);
     }
     return response.json();
 }
 
-function generateTimeSlots() {
-    const timeSlots = [];
-    const startTime = new Date();
-    const endTime = new Date();
-
-    startTime.setHours(8, 0, 0, 0); // Start at 8:00 AM
-    endTime.setHours(18, 0, 0, 0);  // End at 6:00 PM
-
-    while (startTime <= endTime) {
-        const slot = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-        timeSlots.push(slot.replaceAll('.', ''));
-        startTime.setMinutes(startTime.getMinutes() + 30);
-    }
-
-    return timeSlots;
+function handleAppointmentClick(appointment: any) {
+    console.log(appointment);
 }
-

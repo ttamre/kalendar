@@ -5,12 +5,10 @@ import { useState, useEffect } from "react";
 
 type Stat = {
     service: string;
-    booked: number;
-    at_shop: number;
+    in_progress: number;
     completed: number;
     cancelled: number;
     total_bookings: number;
-    cancellation_rate: number;
 };
 
 
@@ -27,6 +25,8 @@ export default function Stats() {
     if (error) {
         return <div className="error container">Error: {error}</div>;
     }
+
+    console.log(stats);
 
     return (
         <div className="container">
@@ -46,7 +46,7 @@ export default function Stats() {
                     {stats.map((stat, index) => (
                         <tr key={index}>
                             <td className="stats grey">{stat.service}</td>
-                            <td className="stats grey">{stat.booked + stat.at_shop}</td>
+                            <td className="stats grey">{stat.in_progress}</td>
                             <td className="stats red">{stat.cancelled}</td>
                             <td className="stats green">{stat.completed}</td>
                             <td className="stats grey">{stat.total_bookings}</td>

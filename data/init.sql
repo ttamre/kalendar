@@ -65,13 +65,13 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS services (
     service_name TEXT PRIMARY KEY CHECK(service_name IN (
         'changeover', 'balance', 'repair', 'rotate', 'swap',
-        'alignment', 'oil change', 'brakes', 'front end'
+        'al4', 'oil change', 'brakes', 'front end'
     ))
 );
 
 INSERT OR IGNORE INTO services (service_name) VALUES
 ('changeover'), ('balance'), ('repair'), ('rotate'), ('swap'),
-('alignment'), ('oil change'), ('brakes'), ('front end');
+('al4'), ('oil change'), ('brakes'), ('front end');
 
 -- BOOKING SERVICES TABLE
 -- connects services to bookings, where 1 booking can have multiple services
