@@ -14,6 +14,10 @@ table {
     /* margin: 10px auto; */
 }
 
+table.bookings {
+    table-layout: auto;
+}
+
 thead {
     font-size: 110%;
     /* background-color: #fdfdfd; */
@@ -27,6 +31,13 @@ thead {
 
 .error {
     margin: 10px;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 20px 0;
 }
 
 .container {
@@ -88,7 +99,7 @@ thead {
     height: 50px;
 }
 
-.appointment {
+.booking {
     display: flex;
     /* align-items: center; */
     justify-content: space-between;
@@ -101,44 +112,76 @@ thead {
     /* background-color: #fffdf6; */
 }
 
-.appointment .name {
-    font-weight: 600;
-}
 
-.appointment .services {
-    font-weight: 400;
+.services {
     text-align: right;
 }
 
-.appointment:hover {
+.booking:hover {
     background-color: #ffd4c5;
     cursor: pointer;
 }
 
-.appointment.booked {
+.bookingWindow {
+    position: fixed;
+    top: 5px;
+    left: 25px;
+    z-index: 9999;
+
+    background: rgba(255, 255, 255, 0.99);
+
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bookingWindowKey {
+    display: inline-block;
+    width: 80px;
+}
+
+
+.bookingsList {
+    font-size: small;
+    padding-top: 0px;
+}
+
+.small-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.booked {
     color: darkgoldenrod;
 }
 
-.appointment.on_site {
+.on_site {
     color: green;
 }
 
-.appointment.in_progress {
+.in_progress {
     color: #1681c9;
 }
 
-.appointment.completed {
+.completed {
     color: hsl(0, 0%, 67%);
     text-decoration: line-through;
 }
 
-.appointment.cancelled {
+.cancelled {
     color: red;
 }
 
 .stats {
     text-align: right;
 }
+
 
 .stats.grey {
     color: grey;

@@ -71,6 +71,7 @@ class SchedulerDB:
 
             results = cursor.fetchall()
             return [dict(row) for row in results]
+    
         
     def select_stats(self):
         """
@@ -143,6 +144,22 @@ class SchedulerDB:
 
             result = cursor.fetchone()
             return dict(result) if result else None
+    
+    def select_bookings(self):
+        """
+        Get detailed information about a specific booking
+
+        returns:
+        --------
+            list[dict]: all booking
+        """
+        with self._connect() as conn:
+
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM detailed_view")
+
+            results = cursor.fetchall()
+            return [dict(row) for row in results]
 
 
     def insert_customer(self, customer):
@@ -189,9 +206,6 @@ class SchedulerDB:
             conn.commit()
 
     def insert_booking(self, booking):
-        """
-        Insert a new booking into the database
-        """
         with self._connect() as conn:
             cursor = conn.cursor()
 
@@ -209,5 +223,23 @@ class SchedulerDB:
                 
             # then, commit the entire transaction
             conn.commit()
+
+
+    def delete_booking(self, invoice_number):
+        with self._connect() as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("""
+                DELETE FROM bookings
+                WHERE invoice_number = ?
+            """, (invoice_number,))
+
+            cursor.execute("""
+                DELETE FROM booking_services
+                WHERE invoice_number = ?
+            """, (invoice_number,))
+
+            conn.commit()
+
 
 db = SchedulerDB(dev_mode=True)

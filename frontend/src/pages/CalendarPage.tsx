@@ -1,7 +1,7 @@
 import Header from '../components/Header';
 import Calendar from '../components/Calendar';
 
-function CalendarPage() {
+export default function CalendarPage() {
 	return (
 		<>
 			<Header />
@@ -9,6 +9,3 @@ function CalendarPage() {
 		</>
 	);
 }
-
-
-export default CalendarPage;

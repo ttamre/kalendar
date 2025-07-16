@@ -36,8 +36,6 @@ example_booking = {
             404: get_error_response(404, example_booking["invoice_number"])
         })
 def get_booking(invoice_number: str) -> Booking:
-    print(f"Retrieving booking with invoice: {invoice_number}")
-    logger.info(f"Retrieving booking with invoice: {invoice_number}")
     try:
         booking = db.select_booking(invoice_number)
         logger.info(f"Booking retrieved: {booking}")
@@ -45,7 +43,16 @@ def get_booking(invoice_number: str) -> Booking:
 
     except DatabaseError as e:
         raise HTTPException(status_code=404, detail=str(e))
-    
+
+@router.get('/bookings')
+def get_bookings() -> list[Booking]:
+    try:
+        bookings = db.select_bookings()
+        logger.info(f"Booking retrieved: {bookings}")
+        return JSONResponse(content=bookings)
+
+    except DatabaseError as e:
+        raise HTTPException(status_code=404, detail=str(e)) 
 
 @router.post('/booking',
              status_code=status.HTTP_201_CREATED,
@@ -58,6 +65,18 @@ def add_booking(booking: Annotated[Booking, Form()]) -> Booking:
         db.insert_booking(booking)
         logger.info(f"Booking added: {booking}")
         return booking
+
+    except IntegrityError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    
+
+@router.delete('/booking/{invoice_number}',
+             status_code=status.HTTP_201_CREATED,
+             responses={})
+def delete_booking(invoice_number: str):
+    try:
+        db.delete_booking(invoice_number)
+        logger.info(f"Booking deleted: {invoice_number}")
 
     except IntegrityError as e:
         raise HTTPException(status_code=409, detail=str(e))

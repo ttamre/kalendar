@@ -40,3 +40,14 @@ export const getNearestWeekday = (date: Date): Date => {
 
     return newDate;
 };
+
+export const readableDateString = (dateString: string): string => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    }
+
+    return date.toLocaleDateString('en-CA', options)
+}

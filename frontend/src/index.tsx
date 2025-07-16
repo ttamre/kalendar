@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import CalendarPage from './pages/CalendarPage';
 import StatsPage from './pages/StatsPage';
+import BookingsPage from './pages/BookingsPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,6 +20,7 @@ root.render(
       <Routes>
         <Route path="/" element={<CalendarPage />} />
         <Route path="/stats" element={<StatsPage />} />
+        <Route path="/bookings" element={<BookingsPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

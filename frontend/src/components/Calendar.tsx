@@ -2,28 +2,64 @@
 
 import { useState, useEffect } from "react";
 import { getPreviousWeekday, getNextWeekday, getNearestWeekday } from "../utils/dateUtils";
+import BookingWindow from "./BookingWindow";
+import { Booking } from "./BookingWindow";
 
 const BAYS = ["TIRES 1", "TIRES 2", "MECH 1", "MECH 2", "ALIGNMENT"];
 
 export default function Calendar() {
-    const [appointments, setAppointments] = useState<Record<string, Record<string, any>>>({});
+    const [bookings, setBookings] = useState<Record<string, Record<string, any>>>({});
     const [selectedDate, setSelectedDate] = useState<Date>(getNearestWeekday(new Date("2025-06-31")));
+    const [showBookingWindow, setShowBookingWindow] = useState<boolean>(false);
+    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchAppointments(selectedDate)
-            .then(data => setAppointments(data))
+        fetchBookings(selectedDate)
+            .then(data => setBookings(data))
             .catch(err => setError(err.message));
     }, [selectedDate]);
 
     if (error) {
-        return <div className="error container">Error: {error}</div>;
+        return <div className="error container">{error}</div>;
     }
 
-    console.log(appointments);
+    console.log(bookings);
 
     const handlePreviousDay = () => setSelectedDate(getPreviousWeekday(selectedDate));
     const handleNextDay = () => setSelectedDate(getNextWeekday(selectedDate));
+    const openBookingWindow = (booking: Booking) => {
+        setSelectedBooking(booking);
+        setShowBookingWindow(true);
+    };
+
+    const closeBookingWindow = () => {
+        setShowBookingWindow(false);
+        setSelectedBooking(null);
+    };
+
+    const onDeleteHandler = (booking: Booking) => {
+        deleteBooking(booking.invoice_number)
+            .then(() => {
+                setBookings(prevBookings => {
+                    const updatedBookings = { ...prevBookings };
+                    delete updatedBookings[booking.invoice_number];
+                    return updatedBookings;
+                });
+            })
+            .then(() => {
+                closeBookingWindow();
+            })
+            .then(() => {
+                return fetchBookings(selectedDate);
+            })
+            .then(data => {
+                setBookings(data);
+            })
+            .catch(err => {
+                setError(err.message);
+            });
+    };
 
     return (
         <div className="container">
@@ -46,23 +82,23 @@ export default function Calendar() {
 
             <div className="calendarBody">
 
-                {Object.entries(appointments).map(([time, bays]) => (
+                {Object.entries(bookings).map(([time, bays]) => (
                     <div key={time} className="row calendarRow">
                         <div className="two columns time">{time}</div>
 
                         {BAYS.map((bay) => {
-                            const appointment = bays[bay];
-                            if (!appointment) {
-                                return <div key={bay} className="two columns appointment">&nbsp;<br />&nbsp;</div>;
+                            const booking = bays[bay];
+                            if (!booking) {
+                                return <div key={bay} className="two columns booking">&nbsp;<br />&nbsp;</div>;
                             }
 
-                            const status = appointment.status || "booked";
-                            const name = appointment.name || "";
+                            const status = booking.status || "booked";
+                            const name = booking.name || "";
                             const [first, last] = name.split(" ");
-                            const services = appointment.services.split(",").map((service: string) => service.trim());
+                            const services = booking.services.split(",").map((service: string) => service.trim());
 
                             return (
-                                <div key={bay} onClick={() => handleAppointmentClick(appointment)} className={`two columns appointment ${status}`}>
+                                <div key={bay} onClick={() => openBookingWindow(booking)} className={`two columns booking ${status}`}>
                                     <div className="name">
                                         {first}<br />{last}
                                     </div>
@@ -73,19 +109,36 @@ export default function Calendar() {
                     </div>
                 ))}
             </div>
+            {/* TODO separate toggleBookingWindow() into function that accepts params
+            will need to make a single Booking type and pass that around */}
+            {showBookingWindow && selectedBooking &&
+                <BookingWindow
+                    booking={selectedBooking}
+                    onDelete={() => onDeleteHandler(selectedBooking)}
+                    onClose={closeBookingWindow}
+                />}
         </div>
     );
 }
 
-async function fetchAppointments(bookingDate: Date = new Date()) {
+async function fetchBookings(bookingDate: Date = new Date()) {
     const dateString = bookingDate.toLocaleDateString("en-CA");
-    const response = await fetch(`/api/schedule/${dateString}`);
+    const response = await fetch(`/api/schedule/?booking_date=${dateString}`);
     if (!response.ok) {
-        throw new Error(`Failed to fetch schedule (${response.status} ${response.statusText})`);
+        throw new Error(`${response.status}: ${response.statusText} (failed to fetch schedule)`);
     }
     return response.json();
 }
 
-function handleAppointmentClick(appointment: any) {
-    console.log(appointment);
+async function deleteBooking(invoice_number: string) {
+    const response = await fetch(`/api/booking/${invoice_number}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!response.ok) {
+        console.error(response)
+    }
+    return response.json();
 }

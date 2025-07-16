@@ -35,28 +35,28 @@ def generate_time_slots():
     return time_slots
 
 
-@router.get('/schedule/{booking_date}', responses={200: get_error_response(200, example_schedule)})
+@router.get('/schedule/', responses={200: get_error_response(200, example_schedule)})
 def get_schedule(booking_date: str = date.today().strftime("%Y-%m-%d")):
 
     schedule = db.select_schedule(booking_date)
     formatted_schedule = generate_time_slots()
     
-    for appointment in schedule:
+    for booking in schedule:
 
-        if not appointment["services"]:
-            appointment["services"] = ""
-            logger.warning(f"Appointment {appointment['invoice_number']} has no services assigned.")
+        if not booking["services"]:
+            booking["services"] = ""
+            logger.warning(f"Booking {booking['invoice_number']} has no services assigned.")
             
-        services = appointment["services"].split(", ")
+        services = booking["services"].split(", ")
 
         tire_services = ["changeover", "balance", "repair", "swap", "rotate"]
         mech_services = ["brakes", "front end", "oil change"]
         alignment_services = ["al4"]
 
-        # TODO handle multiple services in a single appointment
+        # TODO handle multiple services in a single booking
         # For now, just assign the first service to a bay
         bay = ""
-        booking_time = appointment["booking_time"]
+        booking_time = booking["booking_time"]
         
         if any(service in tire_services for service in services):
             bay = "TIRES 1" if "TIRES 1" not in formatted_schedule[booking_time] else "TIRES 2"
@@ -65,7 +65,7 @@ def get_schedule(booking_date: str = date.today().strftime("%Y-%m-%d")):
         if any(service in alignment_services for service in services):
             bay = "ALIGNMENT"
 
-        formatted_schedule[booking_time][bay] = appointment
+        formatted_schedule[booking_time][bay] = booking
 
     logger.info(f"{'-' * 10}\n{booking_date}:\n{'-' * 10}\n{formatted_schedule}")
     return JSONResponse(content=formatted_schedule)

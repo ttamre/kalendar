@@ -23,7 +23,7 @@ export default function Stats() {
     }, []);
 
     if (error) {
-        return <div className="error container">Error: {error}</div>;
+        return <div className="error container">{error}</div>;
     }
 
     console.log(stats);
@@ -62,7 +62,7 @@ export default function Stats() {
 async function fetchStats() {
     const response = await fetch('/api/stats');
     if (!response.ok) {
-        throw new Error(`Failed to fetch stats(${response.status} ${response.statusText})`);
+        throw new Error(`${response.status}: ${response.statusText} (failed to fetch stats)`);
     }
     return response.json();
 }
